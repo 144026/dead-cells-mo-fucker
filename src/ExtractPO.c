@@ -57,12 +57,12 @@ int ShowMoStrContent(FILE * fpMo, unsigned int StrIndex, FILE * fpDst){
     str_info_t StrInfo;
     GetStrInfo(fpMo, &StrInfo, StrIndex);
 
-    char * pOrigin = (char*)malloc(MO_STR_NUL_SIZE+StrInfo.LenOfOrigin*sizeof(char));
+    char * pOrigin = (char*)malloc( (MO_STR_NUL_SIZE+StrInfo.LenOfOrigin)*sizeof(char) );
     fseek(fpMo, StrInfo.OffsetOfOrigin, SEEK_SET);
     fread(pOrigin, sizeof(char), MO_STR_NUL_SIZE+StrInfo.LenOfOrigin, fpMo);
     fprintf(fpDst, "%s\n", pOrigin);
 
-    char * pTrans = (char*)malloc(MO_STR_NUL_SIZE+StrInfo.LenOfTrans*sizeof(char));
+    char * pTrans = (char*)malloc( (MO_STR_NUL_SIZE+StrInfo.LenOfTrans)*sizeof(char) );
     fseek(fpMo, StrInfo.OffsetOfTrans, SEEK_SET);
     fread(pTrans, sizeof(char), MO_STR_NUL_SIZE+StrInfo.LenOfTrans, fpMo);
     fprintf(fpDst, "%s\n", pTrans);
@@ -112,24 +112,24 @@ int Mo2Po(FILE * fpMo, FILE * fpDst){
         GetStrInfo(fpMo, &StrInfo, i);
 
         //read original string
-        char * pOrigin = (char*)malloc(MO_STR_NUL_SIZE+StrInfo.LenOfOrigin*sizeof(char));
+        char * pOrigin = (char*)malloc( (MO_STR_NUL_SIZE+StrInfo.LenOfOrigin)*sizeof(char) );
         fseek(fpMo, StrInfo.OffsetOfOrigin, SEEK_SET);
         fread(pOrigin, sizeof(char), MO_STR_NUL_SIZE+StrInfo.LenOfOrigin, fpMo);
 
         //read translated string
-        char * pTrans = (char*)malloc(MO_STR_NUL_SIZE+StrInfo.LenOfTrans*sizeof(char));
+        char * pTrans = (char*)malloc( (MO_STR_NUL_SIZE+StrInfo.LenOfTrans)*sizeof(char) );
         fseek(fpMo, StrInfo.OffsetOfTrans, SEEK_SET);
         fread(pTrans, sizeof(char), MO_STR_NUL_SIZE+StrInfo.LenOfTrans, fpMo);
 
         //change original string to PO-file format, write to ouput file
-        char * pTemp = (char*)malloc(MO_STR_EXT_SIZE+MO_STR_NUL_SIZE+StrInfo.LenOfOrigin*sizeof(char));
+        char * pTemp = (char*)malloc( (MO_STR_EXT_SIZE+MO_STR_NUL_SIZE+StrInfo.LenOfOrigin)*sizeof(char) );
         MoStr2PoStr(pOrigin, pTemp);
         fprintf(fpDst, "msgid \"%s\"\n", pTemp);
         free(pOrigin);
         free(pTemp);
 
         //change translated string to PO-file format, write to ouput file
-        pTemp = (char*)malloc(MO_STR_EXT_SIZE+MO_STR_NUL_SIZE+StrInfo.LenOfTrans*sizeof(char));
+        pTemp = (char*)malloc( (MO_STR_EXT_SIZE+MO_STR_NUL_SIZE+StrInfo.LenOfTrans)*sizeof(char) );
         MoStr2PoStr(pTrans, pTemp);
         fprintf(fpDst, "msgstr \"%s\"\n\n", pTemp);
         free(pTrans);
